@@ -1,0 +1,82 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Upload Resume</title>
+  </head>
+  <body>
+    <h2>Upload Resume</h2>
+    <label for="text">Name: </label>
+    <input type="text" placeholder="Enter name" id="user-name" />
+    <label for="number">Age: </label>
+    <input type="number" name="age" id="user-age" placeholder="Enter age" />
+    <label>Resume(pdf only)</label>
+    <input type="file" name="attachment accept="application/pdf" required>
+    <button type="submit">Submit</button>
+  </body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Form</title>
+  </head>
+  <body>
+    <h2>User Details Form</h2>
+    <form id="userForm" enctype="multipart/form-data">
+      <label>Name: </label>
+      <input type="text" name="name" required /><br /><br />
+
+      <label>Age: </label>
+      <input type="number" name="age" required /><br /><br />
+
+      <label>Resume (PDF only): </label>
+      <input
+        type="file"
+        name="attachment"
+        accept="application/pdf"
+        required
+      /><br /><br />
+
+      <button type="submit">Submit</button>
+    </form>
+
+    <div id="response"></div>
+
+    <script>
+      document
+        .getElementById("userForm")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+
+          const form = e.target;
+          const formData = new FormData(form);
+
+          try {
+            const res = await fetch("/details", {
+              method: "POST",
+              body: formData,
+            });
+
+            const result = await res.json();
+
+            if (result.id) {
+              document.getElementById(
+                "response"
+              ).innerHTML = `<p>Submitted successfully! View details <a href="/details/${result.id}" target="_blank">here</a>.</p>`;
+            } else {
+              document.getElementById("response").textContent =
+                "Submission failed.";
+            }
+          } catch (err) {
+            console.error("Error:", err);
+            document.getElementById("response").textContent =
+              "Error submitting form.";
+          }
+        });
+    </script>
+  </body>
+</html>
