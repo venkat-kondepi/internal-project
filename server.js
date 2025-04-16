@@ -88,15 +88,13 @@ app.get("/details/:id", (req, res) => {
 
   const data = JSON.parse(fs.readFileSync(jsonPath));
   const fileName = `${data.name}-${data.age}-${data.id}.pdf`;
+  const userDetails = {};
+  userDetails.name = data.name;
+  userDetails.age = data.age;
+  userDetails.id = data.id;
+  userDetails.path = jsonPath;
 
-  res.send(`
-    <h2>User Details</h2>
-    <p><strong>Name:</strong> ${data.name}</p>
-    <p><strong>Age:</strong> ${data.age}</p>
-    <a href="/download/${id}" download>
-      <button>Download Resume</button>
-    </a>
-  `);
+  res.send(userDetails);
 });
 
 // Download route
@@ -112,6 +110,11 @@ app.get("/download/:id", (req, res) => {
   const data = JSON.parse(fs.readFileSync(jsonPath));
   const filePath = path.join(dir, `${data.name}-${data.age}-${data.id}.pdf`);
   res.download(filePath);
+});
+
+//Employee Route
+app.get("/emp/:id", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "emp.html"));
 });
 
 app.listen(PORT, () => {
